@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "service-test-mcp-simple"
+version = "1.0.0"
+description = "MCP server for testing WCF/SOAP and REST services from VS Code agents or any MCP client - service calls, YAML test scenarios with deterministic assertions, data masking, audit log. Windows (NTLM/Kerberos), basic, bearer, API key and WS-Security authentication."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "ohankay" }]
+keywords = ["mcp", "soap", "wcf", "rest", "api testing", "vscode", "copilot", "agent"]
+dependencies = [
+    "mcp>=1.10,<2",
+    "anyio>=4",
+    "zeep>=4.2",
+    "lxml>=5",
+    "requests>=2.31",
+    "requests-ntlm>=1.2",
+    "PyYAML>=6",
+    "jsonpath-ng>=1.6",
+    # mcp needs pywin32 (pywintypes) on Windows; declared explicitly so every install path gets it.
+    "pywin32>=306; sys_platform == 'win32'",
+    # Windows single sign-on (Negotiate/Kerberos/NTLM with the logged-on user, no password).
+    "requests-negotiate-sspi>=0.5; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "uv>=0.5", "packaging>=23"]
+
+[project.scripts]
+service-test-mcp = "service_test_mcp.__main__:main"
+service-test-agent = "service_test_mcp.agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
